@@ -30,16 +30,27 @@ static final int ONE_GB = ONE_MB * 1024;
         File inputFile = new File(args[0]);
         try {
 
-            int chunkSize = ONE_GB;
+            int chunkSize = ONE_MB;
             if (args.length == 2 && args[1].length() > 1)
             {
                 char lastChar = args[1].charAt(args[1].length() - 1);
                 int parsedInt = Integer.parseInt(args[1].substring(0, args[1].length() - 1));
                 if (lastChar == 'M')
+                {
                     chunkSize = ONE_MB * parsedInt;
+                    System.out.println("Hashing using " + chunkSize + " bytes");
+                }
                 else if (lastChar == 'G')
+                {
                     chunkSize = ONE_GB * parsedInt;    
+                    System.out.println("Hashing using " + chunkSize + " bytes");
+                }
             }
+            else
+            {
+                System.out.println("Hashing using " + chunkSize + " bytes");
+            }
+
 
             byte[] treeHash = computeSHA256TreeHash(inputFile, chunkSize);
             System.out.printf("SHA-256 Tree Hash = %s\n", toHex(treeHash));
