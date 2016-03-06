@@ -2,7 +2,7 @@
 
 if [ "$1" == "" ] || [ "$2" == "" ]
 then
-        echo "The first argument must be file name and the second argument chunk size (such as 1G that can be used as an input to split."
+        echo "The first argument must be file name and the second argument chunk size (such as 1G that can be used as an input to split. Use optional third --nochunk parameter to just hash."
         exit 0
 fi
 
@@ -12,8 +12,12 @@ fi
 
 if [ "$?" -ne 0 ]; then echo "Could not compile TreeHash.java.."; exit 1; fi
 
-echo "Chunking..."
-split --bytes=$2 --verbose $1 chunk
+if [ "$3" != "--nochunk" ]; then
+        echo "Chunking..."
+        split --bytes=$2 --verbose $1 chunk
+else
+        echo "Skipping chunking..."
+fi
 
 echo "Hashing..."
 java -Xmx2g TreeHash $1 
