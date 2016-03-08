@@ -13,8 +13,9 @@ fi
 if [ "$?" -ne 0 ]; then echo "Could not compile TreeHash.java.."; exit 1; fi
 
 if [ "$2" != "--nochunk" ]; then
-        echo "Chunking..."
-        split --bytes=$2 --verbose $1 chunk
+        DIR=$( pushd "$( dirname "$1" )" &>/dev/null && pwd && popd &>/dev/null)
+        echo "Chunking to $DIR"
+        split --bytes=$2 --verbose $1 "$DIR/chunk"
 else
         echo "Skipping chunking..."
 fi
